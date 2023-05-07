@@ -4,10 +4,7 @@ import com.op.springbootjpa.entity.Person;
 import com.op.springbootjpa.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,8 +14,11 @@ public class PersonController {
     private final PersonService personService;
 
     @GetMapping("/person")
-    public ResponseEntity<List<Person>> getAllPersons(){
-        return ResponseEntity.ok(personService.getAllPersons());
+    public ResponseEntity<List<Person>> getAllPersons(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName
+    ){
+        return ResponseEntity.ok(personService.getAllPersons(firstName,lastName));
     }
 
     @PostMapping("/person")
