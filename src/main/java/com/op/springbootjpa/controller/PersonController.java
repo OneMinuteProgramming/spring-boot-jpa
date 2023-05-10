@@ -13,16 +13,25 @@ import java.util.List;
 public class PersonController {
     private final PersonService personService;
 
+    @GetMapping("/person/pageable")
+    public ResponseEntity<List<Person>> getPersonsPageable(
+            @RequestParam String firstName,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        return ResponseEntity.ok(personService.getPersons(firstName, page, size));
+    }
+
     @GetMapping("/person")
     public ResponseEntity<List<Person>> getAllPersons(
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName
-    ){
-        return ResponseEntity.ok(personService.getAllPersons(firstName,lastName));
+    ) {
+        return ResponseEntity.ok(personService.getAllPersons(firstName, lastName));
     }
 
     @PostMapping("/person")
-    public ResponseEntity<Void> addPerson(@RequestBody Person person){
+    public ResponseEntity<Void> addPerson(@RequestBody Person person) {
         personService.savePerson(person);
         return ResponseEntity.ok().build();
     }

@@ -4,6 +4,7 @@ import com.op.springbootjpa.entity.Person;
 import com.op.springbootjpa.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +14,17 @@ import java.util.List;
 public class PersonService {
     private final PersonRepository personRepository;
 
-    public void savePerson(Person person){
+    public List<Person> getPersons(String firstName, int page, int size) {
+        return personRepository.findPersonByFirstNameContaining(firstName, PageRequest.of(page, size)).getContent();
+    }
+
+    public void savePerson(Person person) {
         personRepository.save(person);
     }
 
-    public List<Person> getAllPersons(String firstName, String lastName){
-        if(StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName)){
-            return personRepository.findAllPersonByFullNameIgnoreCase(firstName,lastName);
+    public List<Person> getAllPersons(String firstName, String lastName) {
+        if (StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName)) {
+            return personRepository.findAllPersonByFullNameIgnoreCase(firstName, lastName);
         } else if (StringUtils.isNotBlank(firstName)) {
             return personRepository.findAllPersonByFirstNameIgnoreCase(firstName);
         } else if (StringUtils.isNotBlank(lastName)) {
@@ -28,4 +33,5 @@ public class PersonService {
 
         return personRepository.findAll();
     }
+
 }
